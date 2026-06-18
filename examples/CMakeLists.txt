@@ -14,6 +14,7 @@ set(base_examples
     sat-environmental-variables-example
     sat-essa-example
     sat-fwd-link-beam-hopping-example
+    sat-fwd-link-beam-hopping-example-dynamic
     sat-fwd-system-test-example
     sat-generic-launcher
     sat-group-example
