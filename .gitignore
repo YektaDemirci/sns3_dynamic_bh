@@ -4,7 +4,6 @@ ext-utils/.uncrustifyignore
 .hgignore
 .vscode
 
-data/
 cmake-cache/
 cmake-build-debug/
 cmake-build-relwithdebinfo/
