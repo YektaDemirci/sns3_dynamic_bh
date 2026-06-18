@@ -479,7 +479,6 @@ SatHelper::GetBeamCount() const
 
     return m_satConf->GetBeamCount();
 }
-
 void
 SatHelper::CreateSimpleScenario()
 {

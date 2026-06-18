@@ -548,7 +548,8 @@ class SatSuperframeConf : public Object
         CONFIG_TYPE_4  //!< Configuration type 4 (ESSA)
     } ConfigType_t;
 
-    static const uint8_t m_maxFrameCount = 10;
+    //Demirci, this was 10
+    static const uint8_t m_maxFrameCount = 20;
 
     /**
      * Create pre-configured super frame configuration-
@@ -959,6 +960,16 @@ class SatSuperframeConf : public Object
     FRAME_ATTRIBUTE_ACCESSOR_DEFINE(7);
     FRAME_ATTRIBUTE_ACCESSOR_DEFINE(8);
     FRAME_ATTRIBUTE_ACCESSOR_DEFINE(9);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(10);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(11);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(12);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(13);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(14);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(15);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(16);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(17);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(18);
+    FRAME_ATTRIBUTE_ACCESSOR_DEFINE(19);
 };
 
 /**

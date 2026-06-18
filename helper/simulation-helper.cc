@@ -25,6 +25,8 @@
 #include "simulation-helper.h"
 
 #include "satellite-on-off-helper.h"
+#include "ns3/satellite-orbiter-mac.h"
+#include "ns3/satellite-orbiter-net-device.h"
 
 #include "ns3/address.h"
 #include "ns3/cbr-helper.h"
@@ -192,7 +194,8 @@ SimulationHelper::SimulationHelper(std::string simulationName)
 
     // NCC configuration
     Config::SetDefault("ns3::SatSuperframeConf0::FrameConfigType", StringValue("ConfigType_2"));
-    Config::SetDefault("ns3::SatWaveformConf::AcmEnabled", BooleanValue(true));
+    // Config::SetDefault("ns3::SatWaveformConf::AcmEnabled", BooleanValue(true));
+    Config::SetDefault("ns3::SatWaveformConf::AcmEnabled", BooleanValue(false)); // Demirci, this was true
 
     // RBDC
     Config::SetDefault("ns3::SatLowerLayerServiceConf::DaService3_ConstantAssignmentProvided",
@@ -360,14 +363,18 @@ SimulationHelper::SetDefaultValues()
     Config::SetDefault("ns3::SatBbFrameConf::BBFrameUsageMode", StringValue("NormalFrames"));
 
     ConfigureFrequencyBands();
-    ConfigureFrame(0, 20e5, 5e5, 0.2, 0.3, false);
+    // Demirci, the line that was giving a headache!
+    // ConfigureFrame(0, 20e5, 5e5, 0.2, 0.3, false);
+    ConfigureFrame(0, 160e5, 40e5, 0.2, 0.3, false);
 
     SetErrorModel(SatPhyRxCarrierConf::EM_AVI);
     SetInterferenceModel(SatPhyRxCarrierConf::IF_PER_PACKET);
 
-    // ACM enabled
-    EnableAcm(SatEnums::LD_FORWARD);
-    EnableAcm(SatEnums::LD_RETURN);
+    // ACM enabled Demirci
+    // EnableAcm(SatEnums::LD_FORWARD);
+    // EnableAcm(SatEnums::LD_RETURN);
+    DisableAcm(SatEnums::LD_FORWARD);
+    DisableAcm(SatEnums::LD_RETURN);
 
     DisableAllCapacityAssignmentCategories();
     EnableOnlyVbdc(3);
@@ -379,7 +386,7 @@ SimulationHelper::SetDefaultValues()
 
     Config::SetDefault("ns3::SatFwdLinkScheduler::DummyFrameSendingEnabled", BooleanValue(false));
 
-    Config::SetDefault("ns3::SatQueue::MaxPackets", UintegerValue(10000));
+    Config::SetDefault("ns3::SatQueue::MaxPackets", UintegerValue(200));
 }
 
 void
@@ -949,6 +956,7 @@ SimulationHelper::ConfigureFrequencyBands()
 
     Config::SetDefault("ns3::SatConf::FwdFeederLinkBandwidth", DoubleValue(2e+09));
     Config::SetDefault("ns3::SatConf::FwdFeederLinkBaseFrequency", DoubleValue(2.75e+10));
+    // Maybe play with the following?
     Config::SetDefault("ns3::SatConf::FwdUserLinkBandwidth", DoubleValue(5e+08));
     Config::SetDefault("ns3::SatConf::FwdUserLinkBaseFrequency", DoubleValue(1.97e+10));
 
@@ -957,12 +965,12 @@ SimulationHelper::ConfigureFrequencyBands()
     Config::SetDefault("ns3::SatConf::RtnUserLinkBandwidth", DoubleValue(5e+08));
     Config::SetDefault("ns3::SatConf::RtnUserLinkBaseFrequency", DoubleValue(2.95e+10));
 
-    Config::SetDefault("ns3::SatConf::FwdUserLinkChannels", UintegerValue(4));
-    Config::SetDefault("ns3::SatConf::FwdFeederLinkChannels", UintegerValue(16));
+    Config::SetDefault("ns3::SatConf::FwdUserLinkChannels", UintegerValue(4)); // overriden to 1 below
+    Config::SetDefault("ns3::SatConf::FwdFeederLinkChannels", UintegerValue(16)); // overriden to 4-5 below
     Config::SetDefault("ns3::SatConf::RtnUserLinkChannels", UintegerValue(4));
     Config::SetDefault("ns3::SatConf::RtnFeederLinkChannels", UintegerValue(16));
 
-    Config::SetDefault("ns3::SatConf::FwdCarrierAllocatedBandwidth", DoubleValue(1.25e+08));
+    Config::SetDefault("ns3::SatConf::FwdCarrierAllocatedBandwidth", DoubleValue(1.25e+08)); //overriden to 1GHz below
     Config::SetDefault("ns3::SatConf::FwdCarrierRollOff", DoubleValue(0.2));
     Config::SetDefault("ns3::SatConf::FwdCarrierSpacing", DoubleValue(0.0));
 }
@@ -975,22 +983,28 @@ SimulationHelper::ConfigureFwdLinkBeamHopping()
     // Enable flag
     Config::SetDefault("ns3::SatBeamHelper::EnableFwdLinkBeamHopping", BooleanValue(true));
 
+    // Dynamic demand-forecast allocation: service rate proportional to last observed demand.
     Config::SetDefault("ns3::SatBstpController::BeamHoppingMode",
-                       EnumValue(SatBstpController::BH_STATIC));
-    Config::SetDefault("ns3::SatBstpController::StaticBeamHoppingConfigFileName",
-                       StringValue(m_scenarioPath + "/beamhopping/SatBstpConf_GW1.txt"));
+                       EnumValue(SatBstpController::BH_DYNAMIC));
+
     Config::SetDefault("ns3::SatBstpController::SuperframeDuration", TimeValue(MilliSeconds(1)));
 
     // Frequency configuration for 500 MHz user link bandwidth
-    Config::SetDefault("ns3::SatConf::FwdFeederLinkBandwidth", DoubleValue(2e+09));
+    // Feeder link: 2 GHz bandwidth, 4 channels of 500 MHz each
+    // User link: 500 MHz bandwidth, 1 channel
+    // Feeder carrier: 27.5 GHz
+    // User carrier: 19.7 GHz
+    Config::SetDefault("ns3::SatConf::FwdFeederLinkBandwidth", DoubleValue(20e+09)); // 20 GHz: 5 channels x 1 GHz, well above demand
     Config::SetDefault("ns3::SatConf::FwdFeederLinkBaseFrequency", DoubleValue(2.75e+10));
-    Config::SetDefault("ns3::SatConf::FwdUserLinkBandwidth", DoubleValue(5e+08));
+    Config::SetDefault("ns3::SatConf::FwdUserLinkBandwidth", DoubleValue(10e+08)); // Demirci this was 5e+08
     Config::SetDefault("ns3::SatConf::FwdUserLinkBaseFrequency", DoubleValue(1.97e+10));
 
     Config::SetDefault("ns3::SatConf::FwdUserLinkChannels", UintegerValue(1));
-    Config::SetDefault("ns3::SatConf::FwdFeederLinkChannels", UintegerValue(4));
+    Config::SetDefault("ns3::SatConf::FwdFeederLinkChannels", UintegerValue(5));
 
-    Config::SetDefault("ns3::SatConf::FwdCarrierAllocatedBandwidth", DoubleValue(5e+08));
+    Config::SetDefault("ns3::SatConf::FwdCarrierAllocatedBandwidth", DoubleValue(1e+09)); // feeder link carrier BW: 1 GHz each
+    // FwdUserCarrierAllocatedBandwidth is intentionally NOT set here so callers can
+    // control it via --userBw (or equivalent). Default (0) means same as feeder.
     Config::SetDefault("ns3::SatConf::FwdCarrierRollOff", DoubleValue(0.2));
     Config::SetDefault("ns3::SatConf::FwdCarrierSpacing", DoubleValue(0.0));
 }
@@ -1283,6 +1297,63 @@ SimulationHelper::CreateSatScenario(SatHelper::PreDefinedScenario_t scenario,
         m_satHelper->LoadConstellationScenario(
             beamInfo,
             MakeCallback(&SimulationHelper::GetNextUtUserCount, this));
+
+        // Apply per-beam UT count overrides if the user set beam-specific counts.
+        // LoadConstellationScenario assigns UTs purely by position-file geography, so
+        // m_utCount[beamId] entries are ignored above.  We trim or expand beamInfo here.
+        {
+            bool hasPerBeamCounts = false;
+            for (auto& kv : m_utCount)
+                if (kv.first != 0) { hasPerBeamCounts = true; break; }
+
+            if (hasPerBeamCounts)
+            {
+                for (auto& kv : beamInfo)
+                {
+                    uint32_t beamId = kv.first.second;
+                    auto it = m_utCount.find(beamId);
+                    if (it == m_utCount.end()) continue;
+
+                    uint32_t targetCount = static_cast<uint32_t>(it->second->GetInteger());
+                    uint32_t currentCount = kv.second.GetUtCount();
+                    if (targetCount == currentCount) continue;
+
+                    auto positions = kv.second.GetPositions();
+                    SatBeamUserInfo adjusted;
+
+                    if (targetCount <= currentCount)
+                    {
+                        // Trim: keep first targetCount entries
+                        std::vector<std::pair<GeoCoordinate, uint32_t>> trimPos(
+                            positions.begin(), positions.begin() + targetCount);
+                        adjusted.SetPositions(trimPos);
+                        for (uint32_t i = 0; i < targetCount; ++i)
+                            adjusted.AppendUt(kv.second.GetUtUserCount(i));
+                    }
+                    else
+                    {
+                        // Expand: use all existing, then cycle through positions again
+                        adjusted.SetPositions(positions); // start with existing
+                        for (uint32_t i = 0; i < currentCount; ++i)
+                            adjusted.AppendUt(kv.second.GetUtUserCount(i));
+                        // Add extra UTs by cycling through existing positions
+                        uint32_t extra = targetCount - currentCount;
+                        auto extPos = adjusted.GetPositions();
+                        for (uint32_t i = 0; i < extra; ++i)
+                        {
+                            extPos.push_back(positions[i % currentCount]);
+                            adjusted.AppendUt(kv.second.GetUtUserCount(i % currentCount));
+                        }
+                        adjusted.SetPositions(extPos);
+                    }
+
+                    std::cout << "SimulationHelper: beam " << beamId
+                              << " UT count adjusted " << currentCount
+                              << " -> " << targetCount << std::endl;
+                    kv.second = adjusted;
+                }
+            }
+        }
 
         std::vector<std::pair<GeoCoordinate, uint32_t>> additionalNodesVector =
             m_groupHelper->GetAdditionalNodesPerBeam();

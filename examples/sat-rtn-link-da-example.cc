@@ -42,7 +42,7 @@ main(int argc, char* argv[])
 {
     uint32_t endUsersPerUt(3);
     uint32_t utsPerBeam(3);
-    Time simLength(Seconds(50.0));
+    Time simLength(Seconds(50)); //was 50
 
     std::string simulationName = "sat-rtn-link-da-example";
     auto simulationHelper = CreateObject<SimulationHelper>(simulationName);

@@ -720,10 +720,17 @@ SatBeamHelper::Install(NodeContainer ut,
 
     if (m_bstpController)
     {
-        SatBstpController::ToggleCallback gwNdCb =
-            MakeCallback(&SatNetDevice::ToggleState, DynamicCast<SatNetDevice>(gwNd));
+        // BSTP controls the satellite user-link MAC per beam (not the GW feeder MAC).
+        // The GW→SAT feeder link is continuous; only the SAT→UT user link hops.
+        Ptr<SatOrbiterNetDevice> orbiterNd =
+            DynamicCast<SatOrbiterNetDevice>(satNode->GetDevice(0));
+        Ptr<SatMac> orbiterUserMac = orbiterNd->GetUserMac(beamId);
+        NS_ASSERT_MSG(orbiterUserMac != nullptr,
+                      "No orbiter user MAC found for beam " << beamId);
+        SatBstpController::ToggleCallback userMacCb =
+            MakeCallback(&SatMac::Toggle, orbiterUserMac);
 
-        m_bstpController->AddNetDeviceCallback(beamId, fwdUlFreqId, fwdFlFreqId, gwId, gwNdCb);
+        m_bstpController->AddNetDeviceCallback(beamId, fwdUlFreqId, fwdFlFreqId, gwId, userMacCb);
     }
 
     return std::make_pair(gwNd, utNd);

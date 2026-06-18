@@ -69,6 +69,12 @@ class SatGwLlc : public SatLlc
     virtual bool Enque(Ptr<Packet> packet, Address dest, uint8_t flowId);
 
     /**
+     * @brief Return and reset the byte counter that tracks packets arriving
+     * from the IP layer (application demand), independent of feeder capacity.
+     */
+    uint64_t GetAndResetArrivalBytes();
+
+    /**
      *  @brief Called from lower layer (MAC) to inform a tx
      *  opportunity of certain amount of bytes
      *
@@ -147,6 +153,8 @@ class SatGwLlc : public SatLlc
      * @return The link RX direction
      */
     virtual SatEnums::SatLinkDir_t GetSatLinkRxDir();
+
+    uint64_t m_arrivalBytes; ///< bytes arriving from IP layer since last reset
 };
 
 } // namespace ns3

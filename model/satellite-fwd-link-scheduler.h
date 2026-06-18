@@ -235,6 +235,13 @@ class SatFwdLinkScheduler : public Object
     void SetDummyFrameSendingEnabled(bool dummyFrameSendingEnabled);
 
     /**
+     * @brief Dynamically update the carrier bandwidth used for scheduling.
+     * Subclasses may override to also propagate the change to BB frame containers.
+     * @param bandwidthHz New carrier bandwidth in Hz.
+     */
+    virtual void SetCarrierBandwidthHz(double bandwidthHz);
+
+    /**
      * Remove all packets being treated.
      */
     virtual void ClearAllPackets();

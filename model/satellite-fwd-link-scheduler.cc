@@ -211,6 +211,13 @@ SatFwdLinkScheduler::DoDispose()
 }
 
 void
+SatFwdLinkScheduler::SetCarrierBandwidthHz(double bandwidthHz)
+{
+    NS_LOG_FUNCTION(this << bandwidthHz);
+    m_carrierBandwidthInHz = bandwidthHz;
+}
+
+void
 SatFwdLinkScheduler::SetSchedContextCallback(SatFwdLinkScheduler::SchedContextCallback cb)
 {
     NS_LOG_FUNCTION(this << &cb);

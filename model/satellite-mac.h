@@ -300,6 +300,17 @@ class SatMac : public Object
     virtual void Disable();
 
     /**
+     * Toggle the MAC layer enabled state. Convenience wrapper for beam-hopping callbacks.
+     */
+    void Toggle(bool enabled)
+    {
+        if (enabled)
+            Enable();
+        else
+            Disable();
+    }
+
+    /**
      * Set the satellite MAC address on the other side of this link (if regenerative satellite).
      */
     virtual void SetSatelliteAddress(Address satelliteAddress);

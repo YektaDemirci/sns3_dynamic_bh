@@ -46,6 +46,8 @@ set(source_files
     model/satellite-beam-channel-pair.cc
     model/satellite-beam-scheduler.cc
     model/satellite-bstp-controller.cc
+    model/satellite-dynamic-bstp.cc
+    model/satellite-dynamic-bw-allocator.cc
     model/satellite-channel.cc
     model/satellite-channel-estimation-error.cc
     model/satellite-channel-estimation-error-container.cc
@@ -296,6 +298,8 @@ set(header_files
     model/satellite-beam-channel-pair.h
     model/satellite-beam-scheduler.h
     model/satellite-bstp-controller.h
+    model/satellite-dynamic-bstp.h
+    model/satellite-dynamic-bw-allocator.h
     model/satellite-channel-estimation-error-container.h
     model/satellite-channel-estimation-error.h
     model/satellite-channel.h

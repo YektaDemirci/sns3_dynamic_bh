@@ -140,7 +140,7 @@ SatFrameConf::SatFrameConf()
     // default constructor should not be used
     NS_ASSERT(false);
 }
-
+// Demirci check out the frame conf and bandwidth?
 SatFrameConf::SatFrameConf(SatFrameConfParams_t parameters)
     : m_bandwidthHz(parameters.m_bandwidthHz),
       m_isRandomAccess(parameters.m_isRandomAccess),
@@ -534,7 +534,7 @@ SatSuperframeConf::AddFrameConf(SatFrameConf::SatFrameConfParams_t frameConfPara
         {
             double subdivisionAmount = std::pow(2.0, static_cast<double>(i));
 
-            // Create BTU conf according to given attributes
+            // Create BTU conf according to given attributes (Bandwidth Time Unit?)
             frameConfParameters.m_btuConf = Create<SatBtuConf>(bandwidthInHz / subdivisionAmount,
                                                                rollOff,
                                                                spacing,
@@ -1297,77 +1297,49 @@ SatSuperframeConf0::~SatSuperframeConf0()
     NS_LOG_FUNCTION(this);
 }
 
+
+// ADD_SUPER_FRAME_ATTRIBUTES(20, SatSuperframeConf::CONFIG_TYPE_0, 5) 
+// ADD_FRAME_ATTRIBUTES(0, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(1, 1.25e7, 1.25e6, 0.20, 0.30, 1, true, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(2, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(3, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(4, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false,0)
+// ADD_FRAME_ATTRIBUTES(5, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(6, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(7, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(8, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(9, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(10, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(11, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(12, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(13, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(14, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(15, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(16, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0) 
+// ADD_FRAME_ATTRIBUTES(17, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(18, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+// ADD_FRAME_ATTRIBUTES(19, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0);
+
 TypeId
 SatSuperframeConf0::GetTypeId(void)
 {
+    // ADD_FRAME_ATTRIBUTES(index,frameBandwidth, carrierBandwidth, carrierSpacing, carrierRollOff,
+    //                        spreadingFactor, randomAccess, lowerLayerService, logon, guardTime)  
     static TypeId tid =
         TypeId("ns3::SatSuperframeConf0")
             .SetParent<ns3::SatSuperframeConf>()
-            .AddConstructor<SatSuperframeConf0>() ADD_SUPER_FRAME_ATTRIBUTES(
-                10,
-                SatSuperframeConf::CONFIG_TYPE_0,
-                5) ADD_FRAME_ATTRIBUTES(0, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
-                ADD_FRAME_ATTRIBUTES(1, 1.25e6, 1.25e6, 0.20, 0.30, 1, true, 0, false, 0)
-                    ADD_FRAME_ATTRIBUTES(2, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
-                        ADD_FRAME_ATTRIBUTES(3, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
-                            ADD_FRAME_ATTRIBUTES(4,
-                                                 1.25e7,
-                                                 1.25e6,
-                                                 0.20,
-                                                 0.30,
-                                                 1,
-                                                 false,
-                                                 0,
-                                                 false,
-                                                 0) ADD_FRAME_ATTRIBUTES(5,
-                                                                         1.25e7,
-                                                                         1.25e6,
-                                                                         0.20,
-                                                                         0.30,
-                                                                         1,
-                                                                         false,
-                                                                         0,
-                                                                         false,
-                                                                         0)
-                                ADD_FRAME_ATTRIBUTES(6,
-                                                     1.25e7,
-                                                     1.25e6,
-                                                     0.20,
-                                                     0.30,
-                                                     1,
-                                                     false,
-                                                     0,
-                                                     false,
-                                                     0) ADD_FRAME_ATTRIBUTES(7,
-                                                                             1.25e7,
-                                                                             1.25e6,
-                                                                             0.20,
-                                                                             0.30,
-                                                                             1,
-                                                                             false,
-                                                                             0,
-                                                                             false,
-                                                                             0)
-                                    ADD_FRAME_ATTRIBUTES(8,
-                                                         1.25e7,
-                                                         1.25e6,
-                                                         0.20,
-                                                         0.30,
-                                                         1,
-                                                         false,
-                                                         0,
-                                                         false,
-                                                         0) ADD_FRAME_ATTRIBUTES(9,
-                                                                                 1.25e7,
-                                                                                 1.25e6,
-                                                                                 0.20,
-                                                                                 0.30,
-                                                                                 1,
-                                                                                 false,
-                                                                                 0,
-                                                                                 false,
-                                                                                 0);
-
+            .AddConstructor<SatSuperframeConf0>() 
+            ADD_SUPER_FRAME_ATTRIBUTES(10, SatSuperframeConf::CONFIG_TYPE_0, 5) 
+                ADD_FRAME_ATTRIBUTES(0, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(1, 1.25e7, 1.25e6, 0.20, 0.30, 1, true, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(2, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(3, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(4, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false,0)
+                ADD_FRAME_ATTRIBUTES(5, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(6, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(7, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(8, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(9, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0);
     return tid;
 }
 
@@ -1579,77 +1551,36 @@ SatSuperframeConf3::~SatSuperframeConf3()
     NS_LOG_FUNCTION(this);
 }
 
+// ADD_FRAME_ATTRIBUTES(index,frameBandwidth, carrierBandwidth, carrierSpacing, carrierRollOff,
+//                        spreadingFactor, randomAccess, lowerLayerService, logon, guardTime)  
+// Demirci, I think we use this?
 TypeId
 SatSuperframeConf3::GetTypeId(void)
 {
     static TypeId tid =
         TypeId("ns3::SatSuperframeConf3")
             .SetParent<ns3::SatSuperframeConf>()
-            .AddConstructor<SatSuperframeConf3>() ADD_SUPER_FRAME_ATTRIBUTES(
-                10,
-                SatSuperframeConf::CONFIG_TYPE_3,
-                5) ADD_FRAME_ATTRIBUTES(0, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+            .AddConstructor<SatSuperframeConf3>() ADD_SUPER_FRAME_ATTRIBUTES(20,SatSuperframeConf::CONFIG_TYPE_3,5)
+                ADD_FRAME_ATTRIBUTES(0, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
                 ADD_FRAME_ATTRIBUTES(1, 1.25e6, 1.25e6, 0.20, 0.30, 1, true, 0, false, 0)
-                    ADD_FRAME_ATTRIBUTES(2, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
-                        ADD_FRAME_ATTRIBUTES(3, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
-                            ADD_FRAME_ATTRIBUTES(4,
-                                                 1.25e7,
-                                                 1.25e6,
-                                                 0.20,
-                                                 0.30,
-                                                 1,
-                                                 false,
-                                                 0,
-                                                 false,
-                                                 0) ADD_FRAME_ATTRIBUTES(5,
-                                                                         1.25e7,
-                                                                         1.25e6,
-                                                                         0.20,
-                                                                         0.30,
-                                                                         1,
-                                                                         false,
-                                                                         0,
-                                                                         false,
-                                                                         0)
-                                ADD_FRAME_ATTRIBUTES(6,
-                                                     1.25e7,
-                                                     1.25e6,
-                                                     0.20,
-                                                     0.30,
-                                                     1,
-                                                     false,
-                                                     0,
-                                                     false,
-                                                     0) ADD_FRAME_ATTRIBUTES(7,
-                                                                             1.25e7,
-                                                                             1.25e6,
-                                                                             0.20,
-                                                                             0.30,
-                                                                             1,
-                                                                             false,
-                                                                             0,
-                                                                             false,
-                                                                             0)
-                                    ADD_FRAME_ATTRIBUTES(8,
-                                                         1.25e7,
-                                                         1.25e6,
-                                                         0.20,
-                                                         0.30,
-                                                         1,
-                                                         false,
-                                                         0,
-                                                         false,
-                                                         0) ADD_FRAME_ATTRIBUTES(9,
-                                                                                 1.25e7,
-                                                                                 1.25e6,
-                                                                                 0.20,
-                                                                                 0.30,
-                                                                                 1,
-                                                                                 false,
-                                                                                 0,
-                                                                                 false,
-                                                                                 0);
-
+                ADD_FRAME_ATTRIBUTES(2, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(3, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(4, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(5, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(6, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0) 
+                ADD_FRAME_ATTRIBUTES(7, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(8, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(9, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(10, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(11, 1.25e6, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(12, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(13, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(14, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(15, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(16, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0) 
+                ADD_FRAME_ATTRIBUTES(17, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(18, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0)
+                ADD_FRAME_ATTRIBUTES(19, 1.25e7, 1.25e6, 0.20, 0.30, 1, false, 0, false, 0);
     return tid;
 }
 

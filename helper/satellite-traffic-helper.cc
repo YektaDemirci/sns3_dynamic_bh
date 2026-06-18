@@ -777,51 +777,95 @@ SatTrafficHelper::AddOnOffTraffic(TrafficDirection_t direction,
         // Add throuhgput statistics
         if (direction == FWD_LINK)
         {
-            // Global scalar
-            m_satStatsHelperContainer->AddGlobalFwdAppThroughput(
-                SatStatsHelper::OUTPUT_SCALAR_FILE);
-            m_satStatsHelperContainer->AddGlobalFwdFeederMacThroughput(
-                SatStatsHelper::OUTPUT_SCALAR_FILE);
-            m_satStatsHelperContainer->AddGlobalFwdUserMacThroughput(
-                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // // // Global scalar
+            // m_satStatsHelperContainer->AddGlobalFwdAppThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // // m_satStatsHelperContainer->AddGlobalFwdFeederMacThroughput(
+            // //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddGlobalFwdUserMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
 
-            // Global scatter
-            m_satStatsHelperContainer->AddGlobalFwdAppThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
-            m_satStatsHelperContainer->AddGlobalFwdFeederMacThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
-            m_satStatsHelperContainer->AddGlobalFwdUserMacThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // // // Global scatter
+            // m_satStatsHelperContainer->AddGlobalFwdAppThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // // m_satStatsHelperContainer->AddGlobalFwdFeederMacThroughput(
+            // //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddGlobalFwdUserMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
 
-            // Per UT scalar
-            m_satStatsHelperContainer->AddPerUtFwdAppThroughput(SatStatsHelper::OUTPUT_SCALAR_FILE);
-            m_satStatsHelperContainer->AddPerUtFwdFeederMacThroughput(
-                SatStatsHelper::OUTPUT_SCALAR_FILE);
-            m_satStatsHelperContainer->AddPerUtFwdUserMacThroughput(
-                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // // Per UT scalar
+            // m_satStatsHelperContainer->AddPerUtFwdAppThroughput(SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerUtFwdFeederMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerUtFwdUserMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
 
             // Per UT scatter
-            m_satStatsHelperContainer->AddPerUtFwdAppThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
-            m_satStatsHelperContainer->AddPerUtFwdFeederMacThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
-            m_satStatsHelperContainer->AddPerUtFwdUserMacThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerUtFwdAppThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerUtFwdFeederMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerUtFwdUserMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
 
-            // Per GW scalar
+            // // Per GW scalar
             m_satStatsHelperContainer->AddPerGwFwdAppThroughput(SatStatsHelper::OUTPUT_SCALAR_FILE);
-            m_satStatsHelperContainer->AddPerGwFwdFeederMacThroughput(
-                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerGwFwdFeederMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
             m_satStatsHelperContainer->AddPerGwFwdUserMacThroughput(
+                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            m_satStatsHelperContainer->AddPerGwFwdUserDevThroughput(
+                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            m_satStatsHelperContainer->AddPerGwFwdUserPhyThroughput(
                 SatStatsHelper::OUTPUT_SCALAR_FILE);
 
-            // Per GW scatter
-            m_satStatsHelperContainer->AddPerGwFwdAppThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
             m_satStatsHelperContainer->AddPerGwFwdFeederMacThroughput(
+                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            m_satStatsHelperContainer->AddPerGwFwdFeederDevThroughput(
+                SatStatsHelper::OUTPUT_SCALAR_FILE);
+            m_satStatsHelperContainer->AddPerGwFwdFeederPhyThroughput(
+                SatStatsHelper::OUTPUT_SCALAR_FILE);
+
+            // // Per GW scatter
+            // m_satStatsHelperContainer->AddPerGwFwdAppThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // // m_satStatsHelperContainer->AddPerGwFwdFeederMacThroughput(
+            // //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdUserMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            m_satStatsHelperContainer->AddPerSatFwdUserDevThroughput(
                 SatStatsHelper::OUTPUT_SCATTER_FILE);
-            m_satStatsHelperContainer->AddPerGwFwdUserMacThroughput(
-                SatStatsHelper::OUTPUT_SCATTER_FILE);
+
+            // // Per SAT
+            // m_satStatsHelperContainer->AddPerSatFwdAppThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdUserMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdUserPhyThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdUserDevThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+
+            // m_satStatsHelperContainer->AddPerSatFwdFeederMacThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdFeederPhyThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdFeederDevThroughput(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+
+            // // Queue
+            // m_satStatsHelperContainer->AddGlobalFwdQueueBytes(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddGlobalFwdQueueBytes(
+            //     SatStatsHelper::OUTPUT_SCALAR_FILE);
+            // m_satStatsHelperContainer->AddPerGwFwdQueueBytes(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdQueueBytes(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerGwFwdUserQueueBytes(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
+            // m_satStatsHelperContainer->AddPerSatFwdUserQueueBytes(
+            //     SatStatsHelper::OUTPUT_SCATTER_FILE);
         }
         else if (direction == RTN_LINK)
         {

@@ -30,10 +30,10 @@
 using namespace ns3;
 
 /**
- * @file sat-regeneration-example.cc
- * @ingroup satellite
+ * \file sat-regeneration-example.cc
+ * \ingroup satellite
  *
- * @brief This file gives an example of satellite regeneration.
+ * \brief This file gives an example of satellite regeneration.
  *        It allows to launch a simulation with FWD and RTN CBR traffics,
  *        and different levels of regeneration.
  *         - On FWD link: transparent, physical and network
@@ -43,12 +43,90 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("sat-regeneration-example");
 
+/**
+ * @brief Function to log queue sizes at GW and satellite
+ */
+void
+LogQueueSizes()
+{
+    // Access the topology singleton
+    Ptr<SatTopology> topology = Singleton<SatTopology>::Get();
+
+    uint32_t totalGwQueueBytes = 0;
+    uint32_t totalGwQueuePackets = 0;
+    uint32_t totalSatQueueBytes = 0;
+    uint32_t totalSatQueuePackets = 0;
+
+    // Log GW queue sizes (forward link)
+    for (uint32_t gwId = 0; gwId < topology->GetNGwNodes(); ++gwId)
+    {
+        Ptr<Node> gwNode = topology->GetGwNode(gwId);
+        for (uint32_t i = 0; i < gwNode->GetNDevices(); ++i)
+        {
+            Ptr<NetDevice> device = gwNode->GetDevice(i);
+            Ptr<SatNetDevice> satNetDevice = DynamicCast<SatNetDevice>(device);
+            if (satNetDevice)
+            {
+                Ptr<SatLlc> llc = satNetDevice->GetLlc();
+                if (llc)
+                {
+                    uint32_t bytes = llc->GetNBytesInQueue();
+                    uint32_t packets = llc->GetNPacketsInQueue();
+                    totalGwQueueBytes += bytes;
+                    totalGwQueuePackets += packets;
+                }
+            }
+        }
+    }
+
+    // Log Satellite (Orbiter) queue sizes
+    for (uint32_t satId = 0; satId < topology->GetNOrbiterNodes(); ++satId)
+    {
+        Ptr<Node> satNode = topology->GetOrbiterNode(satId);
+        Ptr<SatOrbiterNetDevice> orbiterNetDevice = topology->GetOrbiterNetDevice(satNode);
+        
+        if (orbiterNetDevice)
+        {
+            // Get all user MACs to find which beams exist
+            std::map<uint32_t, Ptr<SatMac>> userMacs = orbiterNetDevice->GetUserMac();
+            
+            // For each beam, get the user LLC (forward link transmission)
+            for (auto macIt = userMacs.begin(); macIt != userMacs.end(); ++macIt)
+            {
+                uint32_t beamId = macIt->first;
+                Ptr<SatOrbiterUserLlc> userLlc = topology->GetOrbiterUserLlc(satNode, beamId);
+                if (userLlc)
+                {
+                    // Cast to base SatLlc to use GetNBytesInQueue()
+                    Ptr<SatLlc> llc = DynamicCast<SatLlc>(userLlc);
+                    if (llc)
+                    {
+                        uint32_t bytes = llc->GetNBytesInQueue();
+                        uint32_t packets = llc->GetNPacketsInQueue();
+                        totalSatQueueBytes += bytes;
+                        totalSatQueuePackets += packets;
+                    }
+                }
+            }
+        }
+    }
+
+    // Print summary
+    std::cout << Simulator::Now().GetSeconds() << "s: "
+              << "GW: " << totalGwQueueBytes << " bytes (" << totalGwQueuePackets << " packets), "
+              << "Satellite: " << totalSatQueueBytes << " bytes (" << totalSatQueuePackets 
+              << " packets)" << std::endl;
+
+    // Schedule next log
+    Simulator::Schedule(Seconds(1.0), &LogQueueSizes);
+}
+
 int
 main(int argc, char* argv[])
 {
     uint32_t beamIdInFullScenario = 10;
-    uint32_t packetSize = 512;
-    std::string interval = "10ms";
+    uint32_t packetSize = 50000;
+    std::string interval = "1ms";
     std::string scenario = "simple";
     std::string forwardRegeneration = "regeneration_network";
     std::string returnRegeneration = "regeneration_network";
@@ -102,9 +180,12 @@ main(int argc, char* argv[])
                        EnumValue(returnLinkRegenerationMode));
     Config::SetDefault("ns3::SatOrbiterFeederPhy::QueueSize", UintegerValue(100000));
     Config::SetDefault("ns3::SatOrbiterUserPhy::QueueSize", UintegerValue(100000));
+    
+    // Increase SatQueue max packets (this is the actual queue limit)
+    Config::SetDefault("ns3::SatQueue::MaxPackets", UintegerValue(100000));
 
     /// Enable ACM
-    Config::SetDefault("ns3::SatBbFrameConf::AcmEnabled", BooleanValue(true));
+    Config::SetDefault("ns3::SatBbFrameConf::AcmEnabled", BooleanValue(false)); //Demirci changed!
 
     /// Set simulation output details
     Config::SetDefault("ns3::SatEnvVariables::EnableSimulationOutputOverwrite", BooleanValue(true));
@@ -123,6 +204,8 @@ main(int argc, char* argv[])
     simulationHelper->SetBeams(beamsEnabled.str());
 
     LogComponentEnable("sat-regeneration-example", LOG_LEVEL_INFO);
+
+    Config::SetDefault("ns3::SatConf::FwdCarrierAllocatedBandwidth", DoubleValue(50e+06)); // 50 MHz
 
     simulationHelper->LoadScenario("geo-33E");
 
@@ -264,6 +347,10 @@ main(int argc, char* argv[])
     s->AddPerSatFwdUserQueuePackets(SatStatsHelper::OUTPUT_SCATTER_FILE);
 
     simulationHelper->EnableProgressLogs();
+    
+    // Schedule queue size logging to start after 1 second and repeat every 1 second
+    Simulator::Schedule(Seconds(1.0), &LogQueueSizes);
+    
     simulationHelper->RunSimulation();
 
     return 0;

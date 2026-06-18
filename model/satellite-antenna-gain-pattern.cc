@@ -22,6 +22,7 @@
 
 #include "satellite-utils.h"
 
+#include "ns3/boolean.h"
 #include "ns3/double.h"
 #include "ns3/log.h"
 
@@ -57,7 +58,15 @@ SatAntennaGainPattern::GetTypeId(void)
                 "Minimum acceptable antenna gain in dBs",
                 DoubleValue(48.0),
                 MakeDoubleAccessor(&SatAntennaGainPattern::m_minAcceptableAntennaGainInDb),
-                MakeDoubleChecker<double>());
+                MakeDoubleChecker<double>())
+            .AddAttribute(
+                "EarthFixedBeams",
+                "When true the satellite-position offset is not applied during gain "
+                "lookup: the pattern lat/lon coordinates are treated as absolute Earth "
+                "coordinates (steered beam that always illuminates the same ground area).",
+                BooleanValue(false),
+                MakeBooleanAccessor(&SatAntennaGainPattern::m_earthFixedBeams),
+                MakeBooleanChecker());
     return tid;
 }
 
@@ -76,6 +85,7 @@ SatAntennaGainPattern::SatAntennaGainPattern()
       m_lonInterval(0.0),
       m_latDefaultSatellite(0.0),
       m_lonDefaultSatellite(0.0),
+      m_earthFixedBeams(false),
       m_nanStrings()
 {
     NS_FATAL_ERROR("Default constructor not in use");
@@ -256,6 +266,13 @@ SatAntennaGainPattern::GetSatelliteOffset(double& latOffset,
     {
         NS_FATAL_ERROR("SatAntennaGainPattern::GetSatelliteOffset - Called without initializing "
                        "satellite position first");
+    }
+
+    if (m_earthFixedBeams)
+    {
+        latOffset = 0.0;
+        lonOffset = 0.0;
+        return;
     }
 
     GeoCoordinate satellite = mobility->GetGeoPosition();

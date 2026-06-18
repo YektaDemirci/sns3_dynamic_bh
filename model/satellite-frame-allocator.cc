@@ -787,6 +787,8 @@ void
 SatFrameAllocator::ShareSymbols(bool fcaEnabled)
 {
     NS_LOG_FUNCTION(this);
+    // Demirci
+    // std::cout << m_availableSymbolsInFrame << std::endl;
 
     if ((m_preAllocatedCraSymbols + m_preAllocatedRdbcSymbols + m_preAllocatedVdbcSymbols) <=
         m_availableSymbolsInFrame)

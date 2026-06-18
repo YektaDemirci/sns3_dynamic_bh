@@ -242,6 +242,8 @@ class SatGwMac : public SatMac
      */
     void SetFwdScheduler(Ptr<SatFwdLinkScheduler> fwdScheduler);
 
+    Ptr<SatFwdLinkScheduler> GetFwdScheduler() const;
+
     /**
      * Method handling beam handover
      * @param satId New satellite id

@@ -52,6 +52,21 @@ class SatOrbiterUserLlc : public SatOrbiterLlc
      */
     virtual ~SatOrbiterUserLlc();
 
+  public:
+    /**
+     * @brief Returns bytes enqueued since the last call and resets the counter.
+     * Used by the beam-hopping scheduler to measure per-beam arrival rate.
+     */
+    uint64_t GetAndResetArrivalBytes();
+
+    /**
+     * @brief Override Enque to count arriving bytes.
+     */
+    virtual bool Enque(Ptr<Packet> packet, Address dest, uint8_t flowId) override;
+
+  private:
+    uint64_t m_arrivalBytes; ///< bytes enqueued since last reset
+
   protected:
     /**
      * Dispose of this class instance

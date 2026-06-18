@@ -224,6 +224,15 @@ class SatAntennaGainPattern : public Object
     double m_lonDefaultSatellite;
 
     /**
+     * When true the beam footprint is Earth-fixed: the satellite offset is not
+     * applied when looking up antenna gain, so the pattern lat/lon coordinates
+     * are treated as absolute geographic positions regardless of where the
+     * satellite currently is. Equivalent to a perfectly steered phased-array
+     * that always illuminates the same area on the ground.
+     */
+    bool m_earthFixedBeams;
+
+    /**
      * Valid Not-a-Number (NaN) strings
      */
     static const std::string m_nanStringArray[4];

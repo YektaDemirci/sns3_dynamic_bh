@@ -43,9 +43,25 @@ SatOrbiterUserLlc::GetTypeId(void)
 }
 
 SatOrbiterUserLlc::SatOrbiterUserLlc()
-    : SatOrbiterLlc()
+    : SatOrbiterLlc(),
+      m_arrivalBytes(0)
 {
     NS_LOG_FUNCTION(this);
+}
+
+bool
+SatOrbiterUserLlc::Enque(Ptr<Packet> packet, Address dest, uint8_t flowId)
+{
+    m_arrivalBytes += packet->GetSize();
+    return SatOrbiterLlc::Enque(packet, dest, flowId);
+}
+
+uint64_t
+SatOrbiterUserLlc::GetAndResetArrivalBytes()
+{
+    uint64_t val = m_arrivalBytes;
+    m_arrivalBytes = 0;
+    return val;
 }
 
 SatOrbiterUserLlc::~SatOrbiterUserLlc()

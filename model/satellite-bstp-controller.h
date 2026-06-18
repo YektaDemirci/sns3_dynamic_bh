@@ -22,6 +22,7 @@
 #define SATELLITE_BSTP_CONTROLLER_H_
 
 #include "satellite-static-bstp.h"
+#include "satellite-dynamic-bstp.h"
 
 #include "ns3/callback.h"
 #include "ns3/nstime.h"
@@ -135,6 +136,10 @@ class SatBstpController : public Object
      * Beam switching time plan
      */
     Ptr<SatStaticBstp> m_staticBstp;
+    Ptr<SatDynamicBstp> m_dynamicBstp;
+
+  public:
+    Ptr<SatDynamicBstp> GetDynamicBstp() const { return m_dynamicBstp; }
 };
 
 } // namespace ns3

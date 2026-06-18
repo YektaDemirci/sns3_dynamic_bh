@@ -524,6 +524,12 @@ class SatTopology : public Object
     Ptr<SatGwLlc> GetGwLlc(Ptr<Node> gw, uint32_t utSatId, uint32_t utBeamId) const;
 
     /**
+     * Like GetGwLlc but returns nullptr instead of asserting when the
+     * (gw, utSatId, utBeamId) combination is not registered.
+     */
+    Ptr<SatGwLlc> GetGwLlcSafe(Ptr<Node> gw, uint32_t utSatId, uint32_t utBeamId) const;
+
+    /**
      * Get SatGwMac instance of a DVB GW
      *
      * @param gw GW node to consider

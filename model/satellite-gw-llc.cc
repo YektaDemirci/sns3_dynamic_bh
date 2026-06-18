@@ -52,7 +52,8 @@ SatGwLlc::GetTypeId(void)
 }
 
 SatGwLlc::SatGwLlc()
-    : SatLlc()
+    : SatLlc(),
+      m_arrivalBytes(0)
 {
     NS_LOG_FUNCTION(this);
 }
@@ -70,6 +71,14 @@ SatGwLlc::DoDispose()
     SatLlc::DoDispose();
 }
 
+uint64_t
+SatGwLlc::GetAndResetArrivalBytes()
+{
+    uint64_t val = m_arrivalBytes;
+    m_arrivalBytes = 0;
+    return val;
+}
+
 bool
 SatGwLlc::Enque(Ptr<Packet> packet, Address dest, uint8_t flowId)
 {
@@ -77,6 +86,7 @@ SatGwLlc::Enque(Ptr<Packet> packet, Address dest, uint8_t flowId)
     NS_LOG_INFO("p=" << packet);
     NS_LOG_INFO("dest=" << dest);
     NS_LOG_INFO("UID is " << packet->GetUid());
+    m_arrivalBytes += packet->GetSize();
 
     if (m_forwardLinkRegenerationMode == SatEnums::REGENERATION_NETWORK)
     {

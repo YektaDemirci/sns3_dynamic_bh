@@ -18,6 +18,7 @@
  * Author: Jani Puttonen <jani.puttonen@magister.fi>
  */
 
+ /* This is the script where you make the allocation! Demirci */
 #include "satellite-bstp-controller.h"
 
 #include "satellite-static-bstp.h"
@@ -31,6 +32,7 @@
 #include "ns3/string.h"
 
 #include <algorithm>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -64,13 +66,14 @@ SatBstpController::NotifyConstructionCompleted()
     }
     else if (m_bhMode == SatBstpController::BH_DYNAMIC)
     {
-        NS_FATAL_ERROR("Beam hopping supports currently only STATIC mode!");
+        m_dynamicBstp = CreateObject<SatDynamicBstp>();
     }
 }
 
 SatBstpController::~SatBstpController()
 {
     m_staticBstp = nullptr;
+    m_dynamicBstp = nullptr;
 }
 
 void
@@ -78,7 +81,7 @@ SatBstpController::Initialize()
 {
     NS_LOG_FUNCTION(this);
 
-    if (m_staticBstp)
+    if (m_bhMode == SatBstpController::BH_STATIC && m_staticBstp)
     {
         m_staticBstp->CheckValidity();
     }
@@ -146,9 +149,13 @@ SatBstpController::AddNetDeviceCallback(uint32_t beamId,
     NS_LOG_INFO("Add beam: " << beamId << ", userFreqId: " << userFreqId
                              << ", feederFreqId: " << feederFreqId << ", gwId: " << gwId);
 
-    if (m_staticBstp)
+    if (m_bhMode == SatBstpController::BH_STATIC && m_staticBstp)
     {
         m_staticBstp->AddEnabledBeamInfo(beamId, userFreqId, feederFreqId, gwId);
+    }
+    else if (m_bhMode == SatBstpController::BH_DYNAMIC && m_dynamicBstp)
+    {
+        m_dynamicBstp->AddEnabledBeamInfo(beamId, userFreqId, feederFreqId, gwId);
     }
 
     m_gwNdCallbacks.insert(std::make_pair(beamId, cb));
@@ -160,14 +167,37 @@ SatBstpController::DoBstpConfiguration()
     NS_LOG_FUNCTION(this);
 
     uint32_t validityInSuperframes(1);
+    std::vector<uint32_t> nextConf;
 
-    if (m_staticBstp)
+    if (m_bhMode == SatBstpController::BH_STATIC && m_staticBstp)
     {
         // Read next BSTP configuration
-        std::vector<uint32_t> nextConf = m_staticBstp->GetNextConf();
-
+        nextConf = m_staticBstp->GetNextConf();
         // First column is the validity
         validityInSuperframes = nextConf.front();
+    }
+    else if (m_bhMode == SatBstpController::BH_DYNAMIC && m_dynamicBstp)
+    {
+        // Dynamic Allocation Logic via dynamic component
+        nextConf = m_dynamicBstp->GetNextConf();
+        validityInSuperframes = nextConf.front();
+    }
+    else
+    {
+        NS_FATAL_ERROR("Beam configuration mode not supported or uninitialized!");
+    }
+
+    if (!nextConf.empty())
+    {
+        // Log which beams are active in this configuration period
+        std::stringstream activeBeams;
+        for (size_t i = 1; i < nextConf.size(); ++i)
+        {
+            activeBeams << nextConf[i] << (i < nextConf.size() - 1 ? ", " : "");
+        }
+        // std::cout << "Time " << Simulator::Now().GetSeconds() 
+        //           << "s - " << (Simulator::Now().GetSeconds() + (validityInSuperframes * m_superFrameDuration.GetSeconds())) 
+        //           << "s: Active Beams [ " << activeBeams.str() << " ]" << std::endl;
 
         // Read BSTP entry and do configuration
         for (CallbackContainer_t::iterator it = m_gwNdCallbacks.begin();
@@ -181,6 +211,7 @@ SatBstpController::DoBstpConfiguration()
              * If found, enable it, if not, disable it. Note, search from the second
              * item of the vector, since the first column is the validity!
              */
+            /* It is a function pointer, turn a Gateway device ON or OFF for a specific beam */
             if (std::find(nextConf.begin() + 1, nextConf.end(), beamId) != nextConf.end())
             {
                 (*it).second(true);
@@ -190,10 +221,6 @@ SatBstpController::DoBstpConfiguration()
                 (*it).second(false);
             }
         }
-    }
-    else
-    {
-        NS_FATAL_ERROR("Dynamic beam switching time plan not yet supported!");
     }
 
     /**

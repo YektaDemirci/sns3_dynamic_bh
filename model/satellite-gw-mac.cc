@@ -908,6 +908,12 @@ SatGwMac::SetFwdScheduler(Ptr<SatFwdLinkScheduler> fwdScheduler)
     }
 }
 
+Ptr<SatFwdLinkScheduler>
+SatGwMac::GetFwdScheduler() const
+{
+    return m_fwdScheduler;
+}
+
 void
 SatGwMac::ChangeBeam(uint32_t satId, uint32_t beamId)
 {

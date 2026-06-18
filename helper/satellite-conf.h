@@ -304,6 +304,7 @@ class SatConf : public Object
      * Currently only one sequence used and only one carrier inside carrier conf.
      */
     std::vector<Ptr<SatFwdCarrierConf>> m_forwardLinkCarrierConf;
+    std::vector<Ptr<SatFwdCarrierConf>> m_forwardUserLinkCarrierConf;
 
     /**
      * Return link carrier configuration for SCPC.
@@ -369,9 +370,15 @@ class SatConf : public Object
     SatSuperframeConf::SuperFrameConfiguration_t m_SuperFrameConfForSeq0;
 
     /**
-     * The configured allocated bandwidth for forward link carriers.
+     * The configured allocated bandwidth for forward feeder link carriers.
      */
     double m_fwdCarrierAllocatedBandwidthHz;
+
+    /**
+     * The configured allocated bandwidth for forward user link carriers.
+     * Only used in REGENERATION_NETWORK mode. 0 means use m_fwdCarrierAllocatedBandwidthHz.
+     */
+    double m_fwdUserCarrierAllocatedBandwidthHz;
 
     /**
      * The configured carrier roll-off factor for forward link carriers.

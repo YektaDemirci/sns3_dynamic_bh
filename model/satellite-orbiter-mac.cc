@@ -264,6 +264,12 @@ SatOrbiterMac::SetFwdScheduler(Ptr<SatFwdLinkScheduler> fwdScheduler)
     m_fwdScheduler = fwdScheduler;
 }
 
+Ptr<SatFwdLinkScheduler>
+SatOrbiterMac::GetFwdScheduler() const
+{
+    return m_fwdScheduler;
+}
+
 void
 SatOrbiterMac::SetLlc(Ptr<SatOrbiterLlc> llc)
 {

@@ -108,7 +108,7 @@ main(int argc, char* argv[])
 
     uint32_t testCase = 0;
     std::string trafficModel = "cbr";
-    double simLength(40.0); // in seconds
+    double simLength(1.0); // in seconds was 40
     Time senderAppStartTime = Seconds(0.1);
     bool traceFrameInfo = false;
     bool traceMergeInfo = false;

@@ -698,6 +698,16 @@ SatTopology::GetGwLlc(Ptr<Node> gw, uint32_t utSatId, uint32_t utBeamId) const
     return layers.m_llc.at(std::make_pair(utSatId, utBeamId));
 }
 
+Ptr<SatGwLlc>
+SatTopology::GetGwLlcSafe(Ptr<Node> gw, uint32_t utSatId, uint32_t utBeamId) const
+{
+    auto it = m_gwLayers.find(gw);
+    if (it == m_gwLayers.end()) return nullptr;
+    auto jt = it->second.m_llc.find(std::make_pair(utSatId, utBeamId));
+    if (jt == it->second.m_llc.end()) return nullptr;
+    return jt->second;
+}
+
 Ptr<SatGwMac>
 SatTopology::GetDvbGwMac(Ptr<Node> gw, uint32_t utSatId, uint32_t utBeamId) const
 {

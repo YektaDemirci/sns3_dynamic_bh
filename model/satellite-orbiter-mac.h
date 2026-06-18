@@ -95,6 +95,8 @@ class SatOrbiterMac : public SatMac
      */
     void SetFwdScheduler(Ptr<SatFwdLinkScheduler> fwdScheduler);
 
+    Ptr<SatFwdLinkScheduler> GetFwdScheduler() const;
+
     /**
      * Set the orbiter LLC associated to this orbiter MAC layer
      */
