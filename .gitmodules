@@ -1,3 +1,4 @@
 [submodule "data"]
 	path = data
-	url = https://github.com/sns3/sns3-data/tree/4200675fa10f3eb9ba3627bc664240a331be4ba9
+	url = https://github.com/sns3/sns3-data.git
+
