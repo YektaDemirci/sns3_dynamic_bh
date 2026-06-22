@@ -1,9 +1,10 @@
 # Dyanmic BH enabled sns-3
 
-To support dynamic BH, some additional changes are implemented on top of [sns-3 repository](https://github.com/sns3/sns3-satellite)
+This repository contains some changes on top of [sns-3 repository](https://github.com/sns3/sns3-satellite) to run dynamic beam hopping examples presented in:
 
-The same license of sns-3 applies to this repository.
+> *"The Impact of Demand Forecasting on Delay and Jitter in DVB-Based Beam-Hopping LEO Networks"*
 
+The same license of the official sns-3 applies to this repository.
 
 ## Directory Structure
 
@@ -63,7 +64,7 @@ cd contrib/satellite/
 git submodule update --init --recursive
 ```
 
-Then you need to copy the following two data folders to support dynamic BH scenarios. They are provided in [additional support data for dynamic BH](https://github.com/YektaDemirci/dvb_)
+Then you need to copy the following two data folders to support dynamic BH scenarios. They are provided in [additional support data for dynamic BH](https://github.com/YektaDemirci/forecastDVBperspective)
 
 * i) leo-tlst3-beam-hopping
 * ii) SatAntennaGain72BeamsShifted
