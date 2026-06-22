@@ -65,8 +65,8 @@ git submodule update --init --recursive
 
 Then you need to copy the following two data folders to support dynamic BH scenarios. They are provided in [additional support data for dynamic BH](https://github.com/YektaDemirci/dvb_)
 
-* **i) leo-tlst3-beam-hopping
-* **ii) SatAntennaGain72BeamsShifted
+* i) leo-tlst3-beam-hopping
+* ii) SatAntennaGain72BeamsShifted
 
 ```text
 your_folders/
