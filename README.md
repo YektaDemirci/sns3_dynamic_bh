@@ -8,7 +8,7 @@ The same license of the official sns-3 applies to this repository.
 
 ## Directory Structure
 
-The supporter repositories must be cloned inside the `contrib/` folder of your base `ns-3-dev` directory. Your final folder structure should look exactly like this:
+The supporter repositories must be cloned inside the `contrib/` folder of your base `ns` directory. Your final folder structure should look exactly like this:
 
 ```text
 your_folders/
