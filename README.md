@@ -11,7 +11,7 @@ The supporter repositories must be cloned inside the `contrib/` folder of your b
 
 ```text
 your_folders/
-└── ns-3-dev/                     # Base Repository
+└── ns/                     # Base Repository
     └── contrib/
         ├── magister-stats/       # Supporter Repository
         ├── satellite/            # Supporter Repository
@@ -29,6 +29,8 @@ cd contrib
 
 
 ## --- 1. Clone and Checkout custom 'satellite' ---
+This is the sns-3 repo that supports dynamic BH and built on top of official [sns-3 repository](https://github.com/sns3/sns3-satellite)
+
 ```bash
 git clone https://github.com/YektaDemirci/sns3_dynamic_bh.git satellite
 ```
@@ -61,30 +63,32 @@ cd contrib/satellite/
 git submodule update --init --recursive
 ```
 
-Then you need to copy the following two data folders to support dynamic BH scenarios.
+Then you need to copy the following two data folders to support dynamic BH scenarios. They are provided in [additional support data for dynamic BH](https://github.com/YektaDemirci/dvb_)
 
 i) leo-tlst3-beam-hopping ;copy
+ii) SatAntennaGain72BeamsShifted ;replace
 
+```text
 your_folders/
 └── ns/                     # Base Repository
     └── contrib/
         └── satellite/
             └── data/
                 └── scenarios/
-                    └──leo-tlst3-beam-hopping # Copy following this hiearchy
-                    
-ii) SatAntennaGain72BeamsShifted ;replace
+                    └──leo-tlst3-beam-hopping # Copy here
+```                 
 
+```text
 your_folders/
 └── ns/                     # Base Repository
     └── contrib/
         └── satellite/
             └── data/
                 └── additional-input/
-                    └──SatAntennaGain72BeamsShifted # Replace this file
+                    └──SatAntennaGain72BeamsShifted # Replace this folder
+```
 
-
-Then, at ns-3-dev/ you should be able to run the provided simulation examples, for instance:
+Then, at ns/ you should be able to run the provided simulation examples, for instance:
 
 ```bash
 ./ns3 run sat-fwd-link-beam-hopping-example-dynamic -- --simTime=3.01 --planSuperframes=15  --users=sym   --scheduler=fixed   --userBw=330e6   --shape55=1.04   --shape56=1.04   --shape57=1.04
