@@ -49,7 +49,7 @@ cd magister-stats && git checkout 003f6a29ce74808d0b2579fd16a9718f793f5bfe && cd
 ```
 
 ## --- 4. Compilation
-Once you have these, you can compile the source codes as described by [SNS-3 CMake](https://github.com/sns3/sns3-satellite#cmake). I had cmake version 3.28.3 while compiling the source codes.
+Once you have these, you can compile the source codes as follows. I had cmake version 3.28.3 at the time of compiling on my local.
 
 You need to be on /ns folder:
 ```bash
@@ -64,7 +64,7 @@ cd contrib/satellite/
 git submodule update --init --recursive
 ```
 
-Then you need to copy the following two data folders to support dynamic BH scenarios. They are provided in [additional support data for dynamic BH](https://github.com/YektaDemirci/forecastDVBperspective)
+Then you need to copy/replace the following two data folders to support dynamic BH scenarios. They are provided in [additional support data for dynamic BH](https://github.com/YektaDemirci/forecastDVBperspective)
 
 * i) leo-tlst3-beam-hopping
 * ii) SatAntennaGain72BeamsShifted
@@ -89,7 +89,7 @@ your_folders/
                     └──SatAntennaGain72BeamsShifted # Replace this folder
 ```
 
-Then, at ns/ you should be able to run the provided simulation examples, for instance:
+Then, at ns/ you should be able to run dynamic beam hopping simulation, for instance:
 
 ```bash
 ./ns3 run sat-fwd-link-beam-hopping-example-dynamic -- --simTime=3.01 --planSuperframes=15  --users=sym   --scheduler=fixed   --userBw=330e6   --shape55=1.04   --shape56=1.04   --shape57=1.04
